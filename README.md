@@ -9,6 +9,8 @@ variables, databases, sockets, or whatever you need to style and organize your a
 Although we're targeting Javascript, all examples are in Coffeescript, mainly to show how it looks writing CSS in it. Coffeescript
 (and some equivalents) are absolutely sweet for writing readable objects IMHO.
 
+When I have a few hours free in the coming days I will transcribe all Coffeescript examples to Javascript and append them to this readme.
+
 **Key features:**
 - virtually eliminate the need for external .css files
 - use variables, databases, sockets, or whatever you need for your CSS
@@ -27,6 +29,8 @@ yet, is my recommendation.***
 Any feature requests or feedback is appreciated. I am always on the lookout for bugs, please let me know if you found one in css.js.
 <br/>
 ___
+
+All examples througout this readme are tested and should work in node.js and all major browsers (not too old i guess).
 
 A quick example (in Coffeescript):
 ```coffeescript
@@ -76,7 +80,8 @@ css.add '#header',
 # add .dump to the last line of the final script, it will dynamically create
 # a style-sheet with the rules from context and insert it into the DOM:
 console.log css.dump()
-# div{color:#eee;}#body{width:100%;height:100%;border:solid 5px #444;background-color:#111;}#header{width:100%;height:15%;border:solid 1px #444;background-color:#eee;}#header #title{position:relative;left:50px;top:30px;color:#444;}
+
+div{color:#eee;}#body{width:100%;height:100%;border:solid 5px #444;background-color:#111;}#header{width:100%;height:15%;border:solid 1px #444;background-color:#eee;}#header #title{position:relative;left:50px;top:30px;color:#444;}
 
 
 # .dump defaults to compressed output, use .dump_ to get prettified output:
@@ -373,10 +378,10 @@ Returns the value found at selectorAndKey as String, only if selectorAndKey exis
 If no valid value can be resolved from selectorAndKey, .gets returns an empty string.
 ```coffeescript
 css= new Css '#body',
-	left: 100
+	opacity: 0.1
 
-console.log css.gets '#body left'
-# '100'
+console.log css.gets '#body opacity'
+# '0.1'
 
 console.log css.gets '#body right'
 # ''
@@ -792,7 +797,7 @@ css2.keyframes.add 'anim2',
 	'100':
 		left: 100
 
-# give css2 it's own prefixes, this will also affect css2.keyframes!
+# give css2 its own prefixes, this will also affect css2.keyframes!
 css2.prefixes= [ '-moz-', '' ]
 # and give left another unit for css2
 css2.unit.left= 'px'
@@ -811,7 +816,6 @@ console.log css1.dump_()
 	100%{
 		left              : 100%;
 	}
-
 }
 @keyframes anim1{
 	0%{
@@ -820,7 +824,6 @@ console.log css1.dump_()
 	100%{
 		left              : 100%;
 	}
-
 }
 div{
 	-webkit-animation : anim1 5s linear;
@@ -837,7 +840,6 @@ console.log css2.dump_()
 	100%{
 		left              : 100px;
 	}
-
 }
 @keyframes anim2{
 	0%{
@@ -846,7 +848,6 @@ console.log css2.dump_()
 	100%{
 		left              : 100px;
 	}
-
 }
 div{
 	animation         : anim2 5s linear;
@@ -909,3 +910,547 @@ ___
 **Additional**
 
 I am always open for feature requests or any feedback. You can reach me at Github.
+
+___
+
+Javascript examples:
+====================
+
+**The quick introductory example:**
+```javascript
+// some data to work with
+var colors= {
+	 white		: '#eee'
+	,gray		: '#444'
+	,black		: '#111'
+};
+
+var borders= {
+	 thin			: 'solid 1px '+ colors.gray
+	,fat			: 'solid 5px '+ colors.gray
+};
+
+// create a new instance of Css
+var css= new Css();
+
+// set units for those properties you want to use as Numbers
+css.units
+	.set( '%', 'width height' )
+	.set( 'px', 'top left' );
+
+// write your css:
+css.add( 'div', {
+	color	: colors.white
+});
+
+css.add( '#body', {
+	 width	: 100
+	,height	: 100
+	,border	: borders.fat
+	// you can either use or mix camel-case and dashes
+	,backgroundColor: colors.black
+});
+
+css.add( '#header', {
+	 width	: css.getn( '#body width' )
+	,height	: css.getn('#body height')* .15
+	,border	: borders.thin
+	,backgroundColor: colors.white
+	,'#title': {
+		 position	: 'relative'
+		,left			: 50
+		,top			: 30
+		,color		: colors.gray
+		,':hover': {
+			backgroundColor: colors.black
+		}
+	}
+});
+
+// add .dump to the last line of the final script, it will dynamically create
+// a style-sheet with the rules from context and insert it into the DOM:
+console.log( css.dump() );
+
+div{color:#eee;}#body{width:100%;height:100%;border:solid 5px #444;background-color:#111;}#header{width:100%;height:15%;border:solid 1px #444;background-color:#eee;}#header #title{position:relative;left:50px;top:30px;color:#444;}
+
+// .dump defaults to compressed output, use .dump_ to get prettified output:
+console.log( css.dump_() );
+
+div{
+	color             :#eee;
+}
+#body{
+	width             :100%;
+	height            :100%;
+	border            :solid 5px #444;
+	background-color  :#111;
+}
+#header{
+	width             :100%;
+	height            :15%;
+	border            :solid 1px #444;
+	background-color  :#eee;
+}
+#header #title{
+	position          :relative;
+	left              :50px;
+	top               :30px;
+	color             :#444;
+}
+#header #title:hover{
+	background-color  :#111;
+}
+```
+___
+**Css.prototype.constructor example**
+```javascript
+// the most basic start of a Css object:
+var css= new Css();
+
+// or with a selector:
+var css= new Css( 'div', {
+	color: '#222'
+});
+
+// or a selector path at once with sub paths inside:
+
+var css= new Css( '#body #sidebar', {
+	 width	: '100px'
+	,height	: '600px'
+	,backgroundColor: '#222'
+	,'#menuItem': {
+		 marginLeft: '10px'
+		,backgroundColor: '#333'
+		,'#text': {
+		 	 color: '#24a'
+		 	,':hover': {
+		 		color: '#25a'
+		 	}
+		}
+	}
+	,'#footer': {
+		backgroundColor: '#111'
+	}
+});
+
+console.log( css.dump_() );
+
+#body #sidebar{
+	width             : 100px;
+	height            : 600px;
+	background-color  : #222;
+}
+#body #sidebar #menuItem{
+	margin-left       : 10px;
+	background-color  : #333;
+}
+#body #sidebar #menuItem #text{
+	color             : #24a;
+}
+#body #sidebar #menuItem #text:hover{
+	color             : #25a;
+}
+#body #sidebar #footer{
+	background-color  : #111;
+}
+```
+___
+**Css.prototype.object example**
+```javascript
+var css= new Css( 'div ul li', { color: '#333' } );
+console.log( css.object.div.ul.li.color );
+// #333
+```
+___
+**Css.prototype.unit example**
+```javascript
+Css.Units.set( 'px', 'width height' );
+
+var css= new Css( 'div', {
+	 top	: 100
+	,width	: 33
+	,height	: 99
+});
+
+css.unit.width= 'pt';
+
+console.log( css.dump_() );
+
+div{
+	top				: 100;
+	width			: 33pt;
+	height			: 99px;
+}
+```
+___
+**Css.prototype.add example**
+```javascript
+var css= new Css( '#header #left color', '#333' );
+console.log( css.dump() );
+// #header #left{color:#333}
+
+css.add( '#header #left #menu #item color', 'green' )
+console.log( css.dump() );
+// #header #left{color:#333;}#header #left #menu #item{color:green;}
+```
+___
+**Css.prototype.set example**
+```javascript
+var css= new Css( 'div ul li', { color: '#333' } );
+css.set( 'div ul li color', '#111' );
+console.log( css.gets('div ul li color') );
+// #111
+```
+___
+**Css.prototype.get example**
+```javascript
+var css= new Css( '#body', {
+	 left	: 100
+	,right: '100'
+});
+
+console.log( css.get('#body left') );
+// 100
+
+console.log( css.get('#body right') );
+// '100'
+
+console.log( css.get('#body top') );
+// ''
+```
+___
+**Css.prototype.gets example**
+```coffeescript
+var css= new Css( '#body', {
+	opacity: 0.1
+});
+
+console.log( css.gets('#body opacity') );
+// '0.1'
+
+console.log( css.gets('#body right') );
+// ''
+```
+___
+**Css.prototype.getn example**
+```javascript
+var css= new Css( '#body width', '100px' );
+
+// #body width is found, so 42 will be ignored
+console.log( css.getn('#body width', 42) );
+// 100 (typeof 100 === 'number')
+
+// no replacement value defaults to 0
+console.log( css.getn('#body height') );
+// 0
+
+// #body height is not found, replacement will be used
+console.log( css.getn('#body height', 42) );
+// 42
+```
+___
+**Css.prototype.getu example**
+```javascript
+var css= new Css( '#body width', 100 );
+// no unit set for width, getu can only return value as string
+console.log( css.getu('#body width') );
+// '100'
+
+Css.Units.set( '%', 'width' );
+// unit is found and will be appended to value
+console.log( css.getu('#body width') );
+// '100%'
+```
+___
+**Css.prototype.dump example**
+```javascript
+var css= new Css( '#body #display', {
+	 left		: 100
+	,'#title': {
+		 left		: '10%'
+		,backgroundColor: '#492'
+		,':hover': {
+			backgroundColor: '#481'
+		}
+	}
+});
+
+css.units.set( 'px', 'left' );
+
+console.log( css.dump() );
+// #body #display{left:100px;}#body #display #title{left:10%;background-color:#492;}#body #display #title:hover{background-color:#481;}
+```
+___
+**Css.prototype.addListener example**
+```javascript
+var css= new Css( 'body background', '#222' );
+
+var bodyListener= css.addListener( 'body background', function( path, value ){
+	console.log( 'Omg! the entire background has changed to '+ value+ '!' );
+});
+
+css.set( 'body background', 'blue' );
+// Omg! the entire background has changed to blue!
+
+// or manually trigger the listener with the returned trigger
+// and override the value argument:
+bodyListener.trigger( 'a bluish color' );
+// Omg! the entire background has changed to a bluish color!
+
+bodyListener.remove();
+bodyListener.trigger( 'no answer..' );
+```
+___
+**Css.Units.all example**
+Prepend to the array:
+```javascript
+Css.Units.all.unshift( 'unit' );
+```
+or use a custom/reduced version to speed-up processing in large projects:
+```javascript
+Css.Units.all= [ '%', 'px', 'pt', 's', 'ms', 'deg' ];
+```
+___
+**Css.Units.unit example**
+```javascript
+// create a Css object and work with numbers
+var css= new Css( 'div', {
+	width: 33
+});
+
+// set global width directly to automatically append 'px'
+// I use the alias for Css.Units.unit: Css.unit
+Css.unit.width= 'px';
+
+console.log( css.dump() );
+// div{width:33px;}
+```
+___
+**Css.Units.hasUnit example**
+```javascript
+console.log( Css.Units.hasUnit('spin') );
+// false
+
+if( unit= Css.Units.hasUnit( '100in') )
+	console.log( unit );
+// in
+```
+___
+**Css.Units.strip example**
+```javascript
+console.log( Css.Units.strip('spin') );
+// spin
+
+console.log( Css.Units.strip('100in') );
+// 100
+```
+___
+**Css.Units.set example**
+```javascript
+Css.Units.set( 'px', 'width height' ).set( '%', 'left right' );
+console.log( Css.unit );
+// { width: 'px', height: 'px', left: '%', right: '%' }
+
+var css= new Css( 'div', {
+	left: 0
+});
+
+// use .getu to fetch the value+unit
+console.log( css.getu('div left') );
+// 0%
+```
+___
+**Css.Units.remove example**
+```javascript
+Css.Units.set( 'px', 'width height' ).set( '%', 'left right' );
+console.log( Css.unit );
+// { width: 'px', height: 'px', left: '%', right: '%' }
+
+// use .remove allows for multiple removals at once
+Css.Units.remove( 'left right' );
+console.log( Css.unit );
+// { width: 'px', height: 'px' }
+
+// or use the standard JS delete operation for one if you prefer
+delete Css.unit[ 'width' ];
+console.log( Css.unit )
+// { height: 'px' }
+```
+___
+**Css.Keyframes.prototype.units example**
+```javascript
+// turn off global prefixes to have less output here
+Css.Browser.prefixes= [''];
+// set global unit for left
+Css.Units.set( 'px', 'left' );
+
+var css= new Css( 'div', {
+	left: 10
+});
+
+css.keyframes.add( 'someId', {
+	 '0': {
+		left: 30
+	}
+	,'100': {
+		left: 40
+	}
+});
+
+// now override any global or Css context units
+css.keyframes.unit.left= '%';
+// see that only the @keyframes units are overridden
+console.log( css.dump_() );
+@keyframes someId{
+	0%{
+		left              : 30%;
+	}
+	100%{
+		left              : 40%;
+	}
+}
+div{
+	left              : 10px;
+}
+```
+___
+**Css.Keyframes.prototype.add example**
+```javascript
+Css.Units.set( 'px', 'top left' );
+var css= new Css( 'div', {
+	animation: 'squareAnim 5s linear 2s infinite alternate'
+});
+
+// note that I don't need to use the %, it will be added automatically
+// only add an id as first argument
+css.addKeyframes( 'squareAnim', {
+	 '0'	: {
+		 left		: 0
+		,top		: 0
+	}
+	# or you can do CSS style inline
+	,'25'	: { left: 200, top:   0 }
+	,'50'	: { left: 200, top:	200 }
+	,'75'	: { left:	0, top:	200 }
+	,'100'	: { left:	0, top:   0 }
+});
+```
+___
+
+
+
+
+**Css.Browser.prefixes example**
+```coffeescript
+// set global browser prefixes
+Css.Browser.prefixes=  [ '-webkit-', '' ];
+
+// let Css watch for animation as a browser-specific property
+Css.Browser.specific.push( 'animation' );
+
+// set left to have % as global unit so we can use numbers
+Css.Units.set( '%', 'left' );
+
+var css1= new Css( 'div', {
+	animation: 'anim1 5s linear'
+});
+
+var css2= new Css( 'div', {
+	animation: 'anim2 5s linear'
+});
+
+// give each instance a @keyframes animation
+css1.keyframes.add( 'anim1', {
+	 '0': {
+		left: 10
+	}
+	,'100': {
+		left: 100
+	}
+});
+
+css2.keyframes.add( 'anim2', {
+	 '0': {
+		left: 10
+	}
+	,'100': {
+		left: 100
+	}
+});
+
+// give css2 its own prefixes, this will also affect css2.keyframes!
+css2.prefixes= [ '-moz-', '' ];
+// and give left another unit for css2
+css2.unit.left= 'px';
+// let css2 not watch for animation as a browser-specific property by
+// overriding Css.Browser.specific
+// use at least '' to show non-prefixed key
+css2.specific= [''];
+
+// css1: global unit and prefixes
+console.log( css1.dump_() );
+
+@-webkit-keyframes anim1{
+	0%{
+		left              : 10%;
+	}
+	100%{
+		left              : 100%;
+	}
+}
+@keyframes anim1{
+	0%{
+		left              : 10%;
+	}
+	100%{
+		left              : 100%;
+	}
+}
+div{
+	-webkit-animation : anim1 5s linear;
+	animation         : anim1 5s linear;
+}
+
+// see css2 context overriding the global unit and prefixes
+console.log( css2.dump_() );
+
+@-moz-keyframes anim2{
+	0%{
+		left              : 10px;
+	}
+	100%{
+		left              : 100px;
+	}
+}
+@keyframes anim2{
+	0%{
+		left              : 10px;
+	}
+	100%{
+		left              : 100px;
+	}
+}
+div{
+	animation         : anim2 5s linear;
+}
+```
+___
+
+**Css.Browser.specific example**
+```javascript
+Css.Browser.prefixes= [ '-o-', '-webkit-','-moz-', '' ];
+Css.Browser.specific= [ 'animation', 'transform', 'transition', 'etc..' ];
+
+var css= new Css( '#animDiv', {
+	animation: 'fadeAnimation 5s linear'
+});
+
+console.log( css.dump_() );
+
+#animDiv{
+	-webkit-animation     : fadeAnimation 5s linear;
+	-moz-animation        : fadeAnimation 5s linear;
+	-o-animation          : fadeAnimation 5s linear;
+	animation             : fadeAnimation 5s linear;
+}
+```
