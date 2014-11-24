@@ -7,9 +7,8 @@ Use css.js to write your CSS in Javascript, having all benefits from a programmi
 variables, databases, sockets, or whatever you need to style and organize your app.
 
 Although we're targeting Javascript, all examples are in Coffeescript, mainly to show how it looks writing CSS in it. Coffeescript
-(and some equivalents) are absolutely sweet for writing readable objects IMHO.
-
-When I have a few hours free in the coming days I will transcribe all Coffeescript examples to Javascript and append them to this readme.
+(and some equivalents) are absolutely sweet for writing readable objects IMHO. I translated all Coffeescript examples to Javascript.
+You can find them at the end of this readme.
 
 **Key features:**
 - virtually eliminate the need for external .css files
