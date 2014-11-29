@@ -57,8 +57,10 @@ prettify= ( string ) ->
 				tabs.count--
 				pretty+= '\n'+ tabs()+ '}\n'+ tabs()
 			when ':'
-				pretty+= align( key ) if tabs.count > 0
-				pretty+= char+ ' '
+				if tabs.count > 0
+					pretty+= align( key )+ char+ ' '
+				else
+					pretty+= char
 			when ';'
 				if string[ index+1 ] is '}'
 					pretty+= char

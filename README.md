@@ -887,31 +887,6 @@ ___
 Used internally to apply all preferred browser specific prefixes.
 ___
 
-change log
-==========
-
-**0.1.0**
-
-First commit, a lot to do..
-___
-todo:
-=====
-
-- make internal DOM operations more robust/cross-browser and flexible
-- @media selectors need own processing to become cheaper on the object containing them
-- reduce and/or remove dependencies
-- more testing, also on different browsers
-- make listeners more specific for any combination of: create, read, update and remove (have to do in xs.js)
-- so much more comes to mind
-- create some time to do all this..
-
-___
-**Additional**
-
-I am always open for feature requests or any feedback. You can reach me at Github.
-
-___
-
 Javascript examples:
 ====================
 
@@ -1453,3 +1428,32 @@ console.log( css.dump_() );
 	animation             : fadeAnimation 5s linear;
 }
 ```
+___
+change log
+==========
+
+**0.1.4**
+
+Fixed bug in prettifier causing invalid CSS when ':' in selector
+___
+**0.1.0**
+
+First commit, a lot to do..
+___
+todo:
+=====
+
+- make internal DOM operations more robust/cross-browser and flexible
+- @media selectors need own processing to become cheaper on the object containing them
+- reduce and/or remove dependencies
+- more testing, also on different browsers
+- make listeners more specific for any combination of: create, read, update and remove (have to do in xs.js)
+- so much more comes to mind
+- create some time to do all this..
+
+___
+**Additional**
+
+I am always open for feature requests or any feedback. You can reach me at Github.
+
+___

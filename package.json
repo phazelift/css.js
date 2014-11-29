@@ -1,0 +1,32 @@
+{
+  "name": "css.js",
+  "version": "0.1.4",
+  "description": "Write CSS in Javascript, Cofeescript, or other JS flavours",
+  "main": "css.min.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/phazelift/css.js"
+  },
+  "keywords": [
+    "css",
+    "conversion",
+    "tool",
+    "tools",
+    "manipulation",
+    "library",
+    "utility"
+  ],
+  "author": "Dennis Raymondo van der Sluis<phazelift@gmail.com> (https://github.com/phazelift/)",
+  "license": "GPL-3",
+  "bugs": {
+    "url": "https://github.com/phazelift/css.js/issues"
+  },
+  "homepage": "https://github.com/phazelift/css.js",
+  "dependencies": {
+    "xs.js" : "0.1.62"
+  },
+  "devDependencies": {}
+}

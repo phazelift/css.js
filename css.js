@@ -63,9 +63,10 @@
           break;
         case ':':
           if (tabs.count > 0) {
-            pretty += align(key);
+            pretty += align(key) + char + ' ';
+          } else {
+            pretty += char;
           }
-          pretty += char + ' ';
           break;
         case ';':
           if (string[index + 1] === '}') {
