@@ -16,7 +16,6 @@ You can find them at the end of this readme.
 - work with Number values instead of 'px'/unit juggling
 - fetch any CSS value with ease, in number or string format, with or without unit
 - fetch a specific CSS rule, or fetch 'deep' all rules down the hierarchy
-- let the DOM mirror your entire Css object
 - dynamically add/change/remove CSS while keeping the DOM in sync
 - set listeners on rules, selectors, properties, and listen 'deep' if you need to
 - support for @keyframes and @media queries
@@ -128,19 +127,54 @@ includes words.js, which includes strings.js, which includes types.js.
 - words.js is a toolbox for manipulating the words in a string. It's API can be found at: https://github.com/phazelift/words.js
 - xs.js is a Javascript deep object manipulation tool/library, with string based access. It's API can be found at: https://github.com/phazelift/xs.js
 
-When using css.js in node.js, you can use `npm install css.js` to install css.js and all dependencies at once (requires npm - https://www.npmjs.org).
+<br/>
+
+**node.js**
+
+When using css.js in node.js, you can use `npm install css.js` to install css.js and all dependencies at once.
 ```coffeescript
 var Css= require('css.js');
 ```
 Most methods can be used via Css, but some methods are overloaded. So if you want to use the non-overloaded
-methods, you can create variables for them like so:
+methods, find them in Css:
 ```coffeescript
 var Types	= Css.Types;
 var Strings	= Css.Strings;
 var Words	= Css.Words;
 var Xs		= Css.Xs;
 ```
+<br/>
+
+**AMD**
+
+When using AMD, you can load css.js like so:
+```javascript
+require.config({
+	 paths: {
+		css: [ '../path/to/css.min(.js') ]
+	}
+	,shim:
+		css: [ '../path/to/words.min(.js)', '../path/to/xs.min(.js)' ]
+});
+
+require( ['css'], function( Css ){
+
+	var css= new Css( '#hello', {
+		world: '!'
+	});
+
+	console.log( css.dump() );
+	// #hello{world:!;}
+});
+```
+Don't forget to put the dependencies words.min.js and xs.min.js in the script directory.
+
+<br/>
+
+**Browser**
+
 In the browser you'll have to load the dependencies (for now) in the following order:
+
 ```html
 <script src="words.min.js"></script>
 <script src="xs.min.js"></script>
@@ -1432,6 +1466,10 @@ ___
 change log
 ==========
 
+**0.1.5**
+
+Added AMD loader support.
+___
 **0.1.4**
 
 Fixed bug in prettifier causing invalid CSS when ':' in selector
