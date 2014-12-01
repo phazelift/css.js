@@ -151,10 +151,10 @@ When using AMD, you can load css.js like so:
 ```javascript
 require.config({
 	 paths: {
-		css: [ '../path/to/css.min(.js') ]
+		css: [ 'path/to/css.min(.js') ]
 	}
 	,shim:
-		css: [ '../path/to/words.min(.js)', '../path/to/xs.min(.js)' ]
+		css: [ 'path/to/words.min(.js)', 'path/to/xs.min(.js)' ]
 });
 
 require( ['css'], function( Css ){
