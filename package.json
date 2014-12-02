@@ -1,6 +1,6 @@
 {
   "name": "css.js",
-  "version": "0.1.51",
+  "version": "0.1.52",
   "description": "Write CSS in Javascript, Cofeescript, or other JS flavours",
   "main": "css.min.js",
   "scripts": {

@@ -477,7 +477,7 @@
       };
 
       Css.prototype.getRules = function(selector) {
-        var node, nodes, path, rules, _i, _len;
+        var node, nodes, path, rules, targetNode, _i, _len;
         selector = Strings.oneSpaceAndTrim(selector);
         nodes = this.list(selector);
         if (nodes.length < 1) {
@@ -485,9 +485,10 @@
         }
         path = '';
         rules = '';
+        targetNode = new Words(selector).get(-1);
         for (_i = 0, _len = nodes.length; _i < _len; _i++) {
           node = nodes[_i];
-          if (node.key === new Words(selector).get(-1)) {
+          if (node.key === targetNode) {
             continue;
           }
           if (_.isStringOrNumber(node.value)) {
@@ -519,6 +520,9 @@
 
       Css.prototype.dump = function(toDom) {
         var allRules, key, rootKeys, rules, _i, _len;
+        if (toDom == null) {
+          toDom = true;
+        }
         allRules = this.keyframes.dump(this.prefixes);
         rootKeys = [];
         for (key in this.object) {

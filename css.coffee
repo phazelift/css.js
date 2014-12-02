@@ -1,4 +1,4 @@
-# css.coffee - Write CSS in Javascript tool/library.
+# css.coffee - A library that enables you to write CSS in Javascript, Coffeescript, or any other JS flavour.
 #
 # Copyright (c) 2014 Dennis Raymondo van der Sluis
 #
@@ -280,14 +280,14 @@ createCss= ( Words, Xs ) ->
 	class Css extends Xs
 
 	# some aliases:
-		@Xs		: Xs
-		@Words	: Words
-		@Strings	: Words.Strings
-		@Types	: Words.Types
-		@Units	: Units
-		@unit		: Units.unit
-		@Keyframes: Keyframes
-		@Browser	: Browser
+		@Xs			: Xs
+		@Words		: Words
+		@Strings		: Words.Strings
+		@Types		: Words.Types
+		@Units		: Units
+		@unit			: Units.unit
+		@Keyframes	: Keyframes
+		@Browser		: Browser
 
 		@valuePosition: prettify.valuePosition
 	#
@@ -381,10 +381,11 @@ createCss= ( Words, Xs ) ->
 
 			path	= ''
 			rules	= ''
+			targetNode= new Words( selector ).get -1
+
 			for node in nodes
 
-				# if the selector contains a key, it is not a pure rule
-				continue if node.key is new Words( selector ).get -1
+				continue if node.key is targetNode
 
 				if _.isStringOrNumber node.value
 					# it's a terminator, remove the key from node.path
@@ -408,7 +409,7 @@ createCss= ( Words, Xs ) ->
 
 		getRules_: ( selector ) -> prettify @getRules selector
 
-		dump: ( toDom ) ->
+		dump: ( toDom= true ) ->
 			allRules= @keyframes.dump @prefixes
 			rootKeys= []
 			# fetch all base selectors
@@ -427,7 +428,7 @@ createCss= ( Words, Xs ) ->
 # end of Css
 
 
-# load dependencies
+# load dependencies, create Css and make it available for: AMD, Browser or node.js
 if define? and ( typeof define is 'function' ) and define.amd
 	define 'css', [ 'words', 'xs' ], ( Words, Xs ) -> createCss Words, Xs
 else if window?

@@ -133,15 +133,15 @@ includes words.js, which includes strings.js, which includes types.js.
 
 When using css.js in node.js, you can use `npm install css.js` to install css.js and all dependencies at once.
 ```coffeescript
-var Css= require('css.js');
+Css= require 'css.js'
 ```
 Most methods can be used via Css, but some methods are overloaded. So if you want to use the non-overloaded
 methods, find them in Css:
 ```coffeescript
-var Types	= Css.Types;
-var Strings	= Css.Strings;
-var Words	= Css.Words;
-var Xs		= Css.Xs;
+Types		= Css.Types
+Strings	= Css.Strings
+Words		= Css.Words
+Xs			= Css.Xs
 ```
 <br/>
 
@@ -149,23 +149,20 @@ var Xs		= Css.Xs;
 
 When using AMD, you can load css.js like so:
 ```javascript
-require.config({
-	 paths: {
+require.config
+
+	paths:
 		css: [ 'path/to/css.min(.js') ]
-	}
-	,shim:
+	shim:
 		css: [ 'path/to/words.min(.js)', 'path/to/xs.min(.js)' ]
-});
 
-require( ['css'], function( Css ){
+require ['css'], ( Css ) ->
 
-	var css= new Css( '#hello', {
+	css= new Css '#hello',
 		world: '!'
-	});
 
-	console.log( css.dump() );
-	// #hello{world:!;}
-});
+	console.log css.dump()
+	# #hello{world:!;}
 ```
 Don't forget to put the dependencies words.min.js and xs.min.js in the script directory.
 
