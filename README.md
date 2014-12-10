@@ -59,24 +59,28 @@ css.add '#body',
 	# you can either use or mix camel-case and dashes
 	backgroundColor: colors.black
 
+
 css.add '#header',
 	width	: css.getn '#body width'
 	height	: css.getn('#body height')* .15
 	border	: borders.thin
 	backgroundColor: colors.white
+
 	'#title':
 		position	: 'relative'
 		left		: 50
 		top			: 30
 		color		: colors.gray
+
 		':hover':
 			backgroundColor: colors.black
+
 
 # add .dump to the last line of the final script, it will dynamically create
 # a style-sheet with the rules from context and insert it into the DOM:
 console.log css.dump()
 
-div{color:#eee;}#body{width:100%;height:100%;border:solid 5px #444;background-color:#111;}#header{width:100%;height:15%;border:solid 1px #444;background-color:#eee;}#header #title{position:relative;left:50px;top:30px;color:#444;}
+# div{color:#eee;}#body{width:100%;height:100%;border:solid 5px #444;background-color:#111;}#header{width:100%;height:15%;border:solid 1px #444;background-color:#eee;}#header #title{position:relative;left:50px;top:30px;color:#444;}
 
 
 # .dump defaults to compressed output, use .dump_ to get prettified output:
