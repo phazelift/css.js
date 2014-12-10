@@ -21,14 +21,11 @@ You can find them at the end of this readme.
 - support for @keyframes and @media queries
 - build-in prettifier for debugging
 
-***css.js is under active development. It works, this is the base. You can play with it, use for fun projects, but not for production
-yet, is my recommendation.***
-
 Any feature requests or feedback is appreciated. I am always on the lookout for bugs, please let me know if you found one in css.js.
 <br/>
 ___
 
-All examples througout this readme are tested and should work in node.js and all major browsers (not too old i guess).
+All examples throughout this readme are tested and should work in node.js and all major browsers (not too old i guess).
 
 A quick example (in Coffeescript):
 ```coffeescript
@@ -85,30 +82,30 @@ div{color:#eee;}#body{width:100%;height:100%;border:solid 5px #444;background-co
 # .dump defaults to compressed output, use .dump_ to get prettified output:
 console.log css.dump_()
 
-div{
-	color             :#eee;
-}
-#body{
-	width             :100%;
-	height            :100%;
-	border            :solid 5px #444;
-	background-color  :#111;
-}
-#header{
-	width             :100%;
-	height            :15%;
-	border            :solid 1px #444;
-	background-color  :#eee;
-}
-#header #title{
-	position          :relative;
-	left              :50px;
-	top               :30px;
-	color             :#444;
-}
-#header #title:hover{
-	background-color  :#111;
-}
+# div{
+# 		color             :#eee;
+# }
+# #body{
+# 		width             :100%;
+# 		height            :100%;
+# 		border            :solid 5px #444;
+# 		background-color  :#111;
+# }
+# #header{
+# 		width             :100%;
+# 		height            :15%;
+# 		border            :solid 1px #444;
+# 		background-color  :#eee;
+# }
+# #header #title{
+# 		position          :relative;
+# 		left              :50px;
+# 		top               :30px;
+# 		color             :#444;
+# }
+# #header #title:hover{
+# 		background-color  :#111;
+# }
 ```
 As you can see in the output, the units set with `css.units.set` are applied to the properties as expected.
 Also interesting is the `#header #title` and `#header #title:hover` selectors with properties, you can see they get their
@@ -120,8 +117,10 @@ they form the core of css.js. Check the xs.js API at: https://github.com/phazeli
 ___
 #### Dependencies:
 
-I hope to finally remove most dependencies, making it preferably one file, way smaller. For now, css.js extends xs.js, which
-includes words.js, which includes strings.js, which includes types.js.
+I hope to finally remove most dependencies, making it preferably one file, way smaller. For now the total load is 33kb.
+
+css.js extends xs.js, which includes words.js, which includes strings.js, which includes types.js.
+
 - types.js is a tiny custom type checker/enforcer. It's API can be found at: https://github.com/phazelift/types.js
 - strings.js is a string manipulation library. It's API can be found at: https://github.com/phazelift/strings.js
 - words.js is a toolbox for manipulating the words in a string. It's API can be found at: https://github.com/phazelift/words.js
@@ -139,7 +138,7 @@ Most methods can be used via Css, but some methods are overloaded. So if you wan
 methods, find them in Css:
 ```coffeescript
 Types		= Css.Types
-Strings	= Css.Strings
+Strings		= Css.Strings
 Words		= Css.Words
 Xs			= Css.Xs
 ```
