@@ -22,15 +22,6 @@ createCss= ( Words, Xs ) ->
 	Strings	= Words.Strings
 	_			= Words.Types
 
-	# returns similar array for: multiple arguments, space delimited string, array
-	flexArgs= ( args... ) ->
-		if args.length < 2
-			if _.isString args[ 0 ]
-				args= Strings.split args.join ' '
-			else if _.isArray args[ 0 ]
-				args= args[ 0 ]
-		return args
-
 
 	prettify= ( string ) ->
 
@@ -38,15 +29,18 @@ createCss= ( Words, Xs ) ->
 		tabs.count= 0
 
 		align= ( key ) ->
+
 			if Strings.hasUpper key then adjust= 1
 			else adjust= 0
 			Strings.times ' ', prettify.valuePosition- adjust- key.length
+
 
 		pretty= ''
 		key	= ''
 
 		for char, index in string
 			switch char
+
 				when '{'
 					tabs.count++
 					pretty+= '{\n'+ tabs()
@@ -70,6 +64,7 @@ createCss= ( Words, Xs ) ->
 					pretty+= char
 					key+= char
 
+
 		return pretty
 
 	# set only once outside of function to allow for custom setting
@@ -86,7 +81,8 @@ createCss= ( Words, Xs ) ->
 		@specific: []
 
 		@each: ( callback, prefixes ) ->
-			prefixes= flexArgs prefixes
+
+			prefixes= _.intoArray prefixes
 			if prefixes[ 0 ] is undefined
 				prefixes= Browser.prefixes
 
@@ -125,11 +121,11 @@ createCss= ( Words, Xs ) ->
 			return value
 
 		@set: ( unit, keys... ) ->
-			set Units, unit, flexArgs.apply( @, keys )
+			set Units, unit, _.intoArray.apply( @, keys )
 			return Units
 
 		@remove: ( keys... ) ->
-			remove Units, flexArgs.apply( @, keys )
+			remove Units, _.intoArray.apply( @, keys )
 			return Units
 
 		constructor: ->
@@ -137,21 +133,25 @@ createCss= ( Words, Xs ) ->
 
 		# targets are all given instances of Units, that will override each other and Units.unit.
 		get: ( key, value, targets... ) ->
+
 			if not Units.hasUnit value
 				return unit if unit= @unit[ Strings.toCamel key ]
+
 				# append Units as last fallback, the final unit if no others are found
 				targets.push Units
 				for target in targets
 					# prefer the first valid index
 					return unit if '' isnt unit= _.forceString target.unit[ Strings.toCamel key ]
+
 			return ''
 
+
 		set: ( unit, keys... ) ->
-			set @, unit, flexArgs.apply( @, keys )
+			set @, unit, _.intoArray.apply( @, keys )
 			return @
 
 		remove: ( keys... ) ->
-			remove @, flexArgs.apply( @, keys )
+			remove @, _.intoArray.apply( @, keys )
 			return @
 	#
 	# end of Units
@@ -162,6 +162,7 @@ createCss= ( Words, Xs ) ->
 	class Keyframes
 
 		constructor: ( @parent ) ->
+
 			# @keyframes will override the default Units.unit and @parent.unit settings
 			@keyframes= {}
 			@units= new Units
@@ -172,6 +173,7 @@ createCss= ( Words, Xs ) ->
 
 		# returns false if id exists, context if all went through
 		add: ( id, frames, overwrite ) ->
+
 			# do not add if it exists already, that would be .set
 			return if @keyframes[ id ] and not overwrite
 
@@ -185,6 +187,7 @@ createCss= ( Words, Xs ) ->
 				@keyframes[ id ][ frame+ pct ]= pairs
 
 			return @
+
 
 		remove: ( id ) ->	delete @keyframes[ id ]; @
 
@@ -310,6 +313,7 @@ createCss= ( Words, Xs ) ->
 
 		# keyVal handles the units as it is the final stage before output
 		keyVal: ( key, value ) ->
+
 			unit= @units.get key, value
 			# .unCamel defaults to dashes
 			dashKey= Strings.unCamel key
@@ -322,13 +326,16 @@ createCss= ( Words, Xs ) ->
 				specific= @specific
 
 			if key in specific
+
 				Browser.each ( browser ) ->
 						allBrowsers+= browser+ dashKey+ ':'+ value+ unit+ ';'
 					# allow for overriding Browser.prefixes
 					,@prefixes
 				return allBrowsers
+
 			else
 				return dashKey+ ':'+ value+ unit+ ';'
+
 
 		remove: ( selector, domToo= true ) ->
 			super selector
@@ -410,29 +417,34 @@ createCss= ( Words, Xs ) ->
 		getRules_: ( selector ) -> prettify @getRules selector
 
 		dump: ( toDom= true ) ->
+
 			allRules= @keyframes.dump @prefixes
-			rootKeys= []
+
 			# fetch all base selectors
+			rootKeys= []
 			rootKeys.push key for key of @object
+
 			# fetch deep each base selector
 			allRules+= @getRules( rules ) for rules in rootKeys
+
 			# dump to DOM
 			@style.setSheet allRules if toDom
 			return allRules
 
-		dump_: ( toDom ) -> prettify @dump toDom
 
+		dump_: ( toDom ) -> prettify @dump toDom
 
 	return Css
 #
 # end of Css
 
-
 # load dependencies, create Css and make it available for: AMD, Browser or node.js
 if define? and ( typeof define is 'function' ) and define.amd
-	define 'css', [ 'words', 'xs' ], ( Words, Xs ) -> createCss Words, Xs
+	define 'css', [ 'words.min', 'xs.min' ], ( Words, Xs ) -> createCss Words, Xs
+
 else if window?
 	window.Css= createCss window.Words, window.Xs
+
 else if module?
 	Xs= require 'xs.js'
 	module.exports= createCss Xs.Words, Xs
