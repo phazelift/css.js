@@ -25,7 +25,7 @@ Any feature requests or feedback is appreciated. I am always on the lookout for 
 <br/>
 ___
 
-All examples throughout this readme are tested and should work in node.js and all major browsers (not too old i guess).
+All examples throughout this readme are tested and should work in node.js and all major browsers.
 
 A quick example (in Coffeescript):
 ```coffeescript
@@ -59,7 +59,6 @@ css.add '#body',
 	# you can either use or mix camel-case and dashes
 	backgroundColor: colors.black
 
-
 css.add '#header',
 	width	: css.getn '#body width'
 	height	: css.getn('#body height')* .15
@@ -79,13 +78,11 @@ css.add '#header',
 # add .dump to the last line of the final script, it will dynamically create
 # a style-sheet with the rules from context and insert it into the DOM:
 console.log css.dump()
-
 # div{color:#eee;}#body{width:100%;height:100%;border:solid 5px #444;background-color:#111;}#header{width:100%;height:15%;border:solid 1px #444;background-color:#eee;}#header #title{position:relative;left:50px;top:30px;color:#444;}
 
 
 # .dump defaults to compressed output, use .dump_ to get prettified output:
 console.log css.dump_()
-
 # div{
 # 		color             :#eee;
 # }
@@ -119,34 +116,31 @@ properties safely seperated from other selectors.
 There are quite some nice features included for manipulating the css object, especially the inherited methods of xs.js,
 they form the core of css.js. Check the xs.js API at: https://github.com/phazelift/xs.js
 ___
-#### Dependencies:
+#### Included:
 
-I hope to finally remove most dependencies, making it preferably one file, way smaller. For now the total load is 33kb.
-
-css.js extends xs.js, which includes words.js, which includes strings.js, which includes types.js.
+css.js includes the full types.js(2kB) and xs.js(10kB) libraries, and the necessary parts of strings.js and
+words.js.
 
 - types.js is a tiny custom type checker/enforcer. It's API can be found at: https://github.com/phazelift/types.js
 - strings.js is a string manipulation library. It's API can be found at: https://github.com/phazelift/strings.js
 - words.js is a toolbox for manipulating the words in a string. It's API can be found at: https://github.com/phazelift/words.js
 - xs.js is a Javascript deep object manipulation tool/library, with string based access. It's API can be found at: https://github.com/phazelift/xs.js
 
-<br/>
-
-**node.js**
-
-When using css.js in node.js, you can use `npm install css.js` to install css.js and all dependencies at once.
-```coffeescript
-Css= require 'css.js'
-```
-Most methods can be used via Css, but some methods are overloaded. So if you want to use the non-overloaded
-methods, find them in Css:
+If you want to use the included libraries, you can:
 ```coffeescript
 Types		= Css.Types
+Tools		= Css.Tools
 Strings		= Css.Strings
 Words		= Css.Words
 Xs			= Css.Xs
 ```
-<br/>
+___
+**node.js**
+
+When using css.js in node.js, you can use `npm install css.js`.
+```coffeescript
+Css= require 'css.js'
+```
 
 **AMD**
 
@@ -156,8 +150,6 @@ require.config
 
 	paths:
 		css: [ 'path/to/css.min(.js') ]
-	shim:
-		css: [ 'path/to/words.min(.js)', 'path/to/xs.min(.js)' ]
 
 require ['css'], ( Css ) ->
 
@@ -167,48 +159,26 @@ require ['css'], ( Css ) ->
 	console.log css.dump()
 	# #hello{world:!;}
 ```
-Don't forget to put the dependencies words.min.js and xs.min.js in the script directory.
-
-<br/>
 
 **Browser**
-
-In the browser you'll have to load the dependencies (for now) in the following order:
-
 ```html
-<script src="words.min.js"></script>
-<script src="xs.min.js"></script>
 <script src="css.min.js"></script>
 ```
-After this you can access css.js and it's dependencies via the following global variables:
-- Types
-- Strings
-- Words
-- Xs
-- Css
-
+After this you can access css.js and it's included full and partial libraries via the global window.Css as
+shown above.
 ___
 # API
 
 If you see more types for a value in the method description like: `<string>/<number> value`, it means that type `<string>` is expected,
 but type `<number>` is accepted too.
-___
-**`<flexArgs>`**
 
-Wherever you see the type `<flexArgs>` in the API, it refers to a convenience method I use for flexible arguments passing.
-A stack variable accepting flexArgs converts/accepts 3 types of arguments:
-
-type							|input							|result
-------------------------|--------------------------|--------------
-space delimited strings	|'top left width'				|['top', 'left', 'width']
-multiple arguments		|'top', 'left', 'width'		|['top', 'left', 'width']
-array							|['top', 'left', 'width']	|['top', 'left', 'width']
-
-All generating the same result.
+`<intoArray>` refers to Types.intoArray. It accepts space delimited strings, multiple arguments, or an
+array. See the types.js API for a description.
 ___
 
 Css
 ===
+
 
 Css extends Xs (xs.js). See the xs.js API for more info on what's available.
 
@@ -242,38 +212,43 @@ css= new Css 'div',
 
 # or a selector path at once with sub paths inside:
 css= new Css '#body #sidebar',
+
 	width	: '100px'
 	height	: '600px'
 	backgroundColor: '#222'
+
 	'#menuItem':
 		marginLeft: '10px'
 		backgroundColor: '#333'
+
 		'#text':
 		 	color: '#24a'
+
 		 	':hover':
 		 		color: '#25a'
+
 	'#footer':
 		backgroundColor: '#111'
 
 console.log css.dump_()
-#body #sidebar{
-	width             : 100px;
-	height            : 600px;
-	background-color  : #222;
-}
-#body #sidebar #menuItem{
-	margin-left       : 10px;
-	background-color  : #333;
-}
-#body #sidebar #menuItem #text{
-	color             : #24a;
-}
-#body #sidebar #menuItem #text:hover{
-	color             : #25a;
-}
-#body #sidebar #footer{
-	background-color  : #111;
-}
+#	#body #sidebar{
+#		width             : 100px;
+#		height            : 600px;
+#		background-color  : #222;
+#	}
+#	#body #sidebar #menuItem{
+#		margin-left       : 10px;
+#		background-color  : #333;
+#	}
+#	#body #sidebar #menuItem #text{
+#		color             : #24a;
+#	}
+#	#body #sidebar #menuItem #text:hover{
+#		color             : #25a;
+#	}
+#	#body #sidebar #footer{
+#		background-color  : #111;
+#	}
 ```
 ___
 **Css.prototype.object** (inherited from xs.js)
@@ -335,7 +310,7 @@ unit for a given property, but it won't guess when no unit is found. Therefore, 
 with numeric values.
 ___
 **Css.prototype.prefixes**
-> `<flexArgs> prefixes`
+> `<array> prefixes`
 
 Use contextual .prefixes to override the global Css.Browser.prefixes. Each instance of Css can have it's own prefix set. See
 Css.Brower.prefixes for an example.
@@ -487,10 +462,13 @@ toDom argument is left true, a new DOM stylesheet will be created and inserted i
 stored in context: Css.prototype.stylesheet. If toDom is set false, dump only returns the CSS string.
 ```coffeescript
 css= new Css '#body #display',
+
 	left: 100
+
 	'#title':
 		left: '10%'
 		backgroundColor: '#492'
+
 		':hover':
 			backgroundColor: '#481'
 
@@ -606,10 +584,10 @@ console.log Css.Units.strip '100in'
 ```
 ___
 **Css.Units.set**
-> `<this> Css.Units.set( <string> unit, <flexArgs> names )`
+> `<this> Css.Units.set( <string> unit, <intoArray> names )`
 
 Css.Units.set is to make adding multiple properties for the same unit more convenient. Css.Units.set expects a css-unit (string) and
-css-property names in any flexArgs format. Every name will be added to the Css.Units.unit object with the given css-unit as
+css-property names in any intoArray format. Every name will be added to the Css.Units.unit object with the given css-unit as
 value.
 
 In the example I use the alias Css.unit to show the contents of the 'golbal' unit object:
@@ -627,7 +605,7 @@ console.log css.getu 'div left'
 ```
 ___
 **Css.Units.remove**
-> `<this> Css.Units.remove( <flexArgs> names )`
+> `<this> Css.Units.remove( <intoArray> names )`
 
 Remove one or more css-properties from .unit object.
 ```coffeescript
@@ -832,8 +810,10 @@ css2.keyframes.add 'anim2',
 
 # give css2 its own prefixes, this will also affect css2.keyframes!
 css2.prefixes= [ '-moz-', '' ]
+
 # and give left another unit for css2
 css2.unit.left= 'px'
+
 # let css2 not watch for animation as a browser-specific property by
 # overriding Css.Browser.specific
 # use at least '' to show non-prefixed key
@@ -916,7 +896,7 @@ console.log css.dump_()
 ```
 ___
 **Css.Browser.each**
-> `Css.Browser.each( <function> callback, <flexArgs> prefixes )`
+> `Css.Browser.each( <function> callback, <intoArray> prefixes )`
 
 Used internally to apply all preferred browser specific prefixes.
 ___
@@ -1466,6 +1446,14 @@ ___
 change log
 ==========
 
+**0.2.0**
+
+Removed all dependencies by including only the necessary parts of the libraries. css.min.js is now ~19kB.
+
+types.js and xs.js are now fully included.
+
+If you need to use some parts of strings.js or words.js, you'll have to add them manually to your project.
+___
 **0.1.5**
 
 Added AMD loader support.
@@ -1483,7 +1471,6 @@ todo:
 
 - make internal DOM operations more robust/cross-browser and flexible
 - @media selectors need own processing to become cheaper on the object containing them
-- reduce and/or remove dependencies
 - more testing, also on different browsers
 - make listeners more specific for any combination of: create, read, update and remove (have to do in xs.js)
 - so much more comes to mind

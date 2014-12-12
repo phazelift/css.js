@@ -1,6 +1,6 @@
 {
   "name": "css.js",
-  "version": "0.1.7",
+  "version": "0.2.0",
   "description": "Write CSS in Javascript, Cofeescript, or other JS flavours",
   "main": "css.min.js",
   "scripts": {
@@ -24,9 +24,5 @@
   "bugs": {
     "url": "https://github.com/phazelift/css.js/issues"
   },
-  "homepage": "https://github.com/phazelift/css.js",
-  "dependencies": {
-    "xs.js" : "0.1.9"
-  },
-  "devDependencies": {}
+  "homepage": "https://github.com/phazelift/css.js"
 }
