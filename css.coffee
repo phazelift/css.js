@@ -104,7 +104,6 @@ Types.typeof= ( value ) ->
 #
 class Tools
 
-	# Words.remove
 	@positiveIndex: ( index, max ) ->
 		return false if 0 is index= _.forceNumber index, 0
 		max= Math.abs _.forceNumber max
@@ -276,6 +275,14 @@ class Words
 					result.push response+ ''
 		@words= result
 		return @
+
+	pop: ( amount ) ->
+		amount= Math.abs _.forceNumber amount, 1
+		popped= ''
+		for n in [ 1..amount ]
+			pop= @words.pop()
+			popped= (pop+ ' '+ popped) if pop isnt undefined
+		return popped.trim()
 
 	startsWith: ( start ) ->
 		return false if '' is start= _.forceString start
@@ -956,7 +963,7 @@ class Css extends Xs
 
 	set: ( selector, value, toDom= true ) ->
 		super selector, value
-		@style.set selector, value if toDom
+		@style.set( selector, value ) if toDom
 		return @
 
 	get: ( path ) ->
@@ -1045,7 +1052,6 @@ class Css extends Xs
 # end of Css
 #--------------------------------------------------------------------------------------------
 
-# load dependencies, create Css and make it available for: AMD, Browser or node.js
 if define? and ( typeof define is 'function' ) and define.amd
 	define 'css', [], -> Css
 

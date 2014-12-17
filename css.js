@@ -494,6 +494,19 @@
       return this;
     };
 
+    Words.prototype.pop = function(amount) {
+      var n, pop, popped, _i;
+      amount = Math.abs(_.forceNumber(amount, 1));
+      popped = '';
+      for (n = _i = 1; 1 <= amount ? _i <= amount : _i >= amount; n = 1 <= amount ? ++_i : --_i) {
+        pop = this.words.pop();
+        if (pop !== void 0) {
+          popped = pop + ' ' + popped;
+        }
+      }
+      return popped.trim();
+    };
+
     Words.prototype.startsWith = function(start) {
       var result;
       if ('' === (start = _.forceString(start))) {
