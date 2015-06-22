@@ -676,7 +676,6 @@ prettify= ( string ) ->
 				pretty+= char
 				key+= char
 
-
 	return pretty
 
 # set only once outside of function to allow for custom setting
@@ -1055,8 +1054,8 @@ class Css extends Xs
 if define? and ( typeof define is 'function' ) and define.amd
 	define 'css', [], -> Css
 
-else if window?
-	window.Css= Css
-
 else if module?
 	module.exports= Css
+
+else if window?
+	window.Css= Css
